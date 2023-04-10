@@ -506,12 +506,6 @@ on property:persist.sys.locale=*
     chown system system /mnt/vendor/persist/chargeonly/locale
     chmod 0660 /mnt/vendor/persist/chargeonly/locale
 
-on property:ro.sys.force_max_chrg_temp=*
-    write /sys/class/power_supply/battery/device/force_max_chrg_temp ${ro.sys.force_max_chrg_temp}
-
-on property:ro.sys.force_demo_mode=*
-    write /sys/class/power_supply/battery/device/force_demo_mode ${ro.sys.force_demo_mode}
-
 on property:ro.vendor.hw.pvtui=*
     setprop ro.hardware.device.pvtui ${ro.vendor.hw.pvtui}
 
