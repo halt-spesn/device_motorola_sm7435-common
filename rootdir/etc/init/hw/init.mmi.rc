@@ -354,14 +354,12 @@ service vendor.mmi-boot-sh /vendor/bin/init.mmi.boot.sh
 on property:ro.vendor.mot.hw.rkp_csr_uploaded=* && property:sys.boot_completed=1
     setprop ro.rkp.csr_uploaded ${ro.vendor.mot.hw.rkp_csr_uploaded}
 
-# translate to qcom property name in order to keep the consistent with
-# our legacy property
-on property:persist.vendor.qc.sub.rdump.on=*
-    setprop persist.vendor.ssr.enable_ramdumps ${persist.vendor.qc.sub.rdump.on}
-
 # translate MMI property in order to keep the consistent with QCOM
-on property:persist.vendor.qc.sub.rdump.on=*
-   setprop persist.vendor.ssr.enable_ramdumps ${persist.vendor.qc.sub.rdump.on}
+on property:ro.vendor.hw.dualsim=true
+   setprop persist.radio.multisim.config dsds
+
+on property:ro.vendor.hw.dualsim=false
+   setprop persist.radio.multisim.config ""
 
 on property:sys.sysctl.swappiness=*
     write /proc/sys/vm/swappiness ${sys.sysctl.swappiness}
