@@ -125,8 +125,6 @@ on post-fs
     chmod 0660 /sys/class/capsense/calibrate
 
 on post-fs-data
-    setprop ro.vendor.build.fingerprint ${ro.product.vendor.brand}/${ro.product.vendor.name}/${ro.product.vendor.device}:${ro.vendor.build.version.release}/${ro.vendor.build.id}/${ro.vendor.build.version.incremental}:${ro.vendor.build.type}/${ro.vendor.build.tags}
-
     setprop ro.product.model_for_attestation ${ro.product.vendor.model}
     setprop ro.product.brand_for_attestation ${ro.product.vendor.brand}
     setprop ro.product.name_for_attestation ${ro.product.vendor.name}
