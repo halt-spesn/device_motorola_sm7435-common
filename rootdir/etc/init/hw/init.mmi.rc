@@ -217,11 +217,17 @@ on boot
    chown system system /sys/class/capsense/reset
    chown system system /sys/class/capsense/int_state
 
+on late-fs-charger
+    class_start early_hal
+    mount_all /vendor/etc/fstab.qcom --late
+    # Boot time fs tune
+    write /sys/block/dm-9/queue/read_ahead_kb 2048
+
 on charger
     trigger early-fs
     trigger fs
     trigger post-fs
-    trigger late-fs
+    trigger late-fs-charger
     trigger post-fs-data
     trigger moto-charger
     trigger tks-charger
@@ -322,6 +328,7 @@ on property:vendor.hw.touch.status="ready"
 service vendor.charge_only_mode /vendor/bin/charge_only_mode
     user root
     group graphics system input log
+    capabilities SYS_BOOT
     disabled
 
 on property:vendor.ultrasound.cal=1
