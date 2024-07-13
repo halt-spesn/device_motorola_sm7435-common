@@ -212,6 +212,10 @@ $(call soong_config_set,lineage_health,charging_control_charging_enabled,0)
 $(call soong_config_set,lineage_health,charging_control_charging_path,/sys/class/power_supply/battery/device/force_charging_disable)
 $(call soong_config_set,lineage_health,charging_control_supports_bypass,false)
 
+# Memtrack
+PRODUCT_PACKAGES += \
+    vendor.qti.hardware.memtrack-service
+
 # Moto hardware
 PRODUCT_PACKAGES += \
     MotoActions \
