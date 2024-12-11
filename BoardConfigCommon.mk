@@ -57,9 +57,11 @@ BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
 # Kernel
 BOARD_KERNEL_CMDLINE += \
-    video=vfb:640x400,bpp=32,memsize=3072000 \
+    console=ttynull \
+    disable_dma32=on \
+    nosoftlockup \
     printk.devkmsg=on \
-    firmware_class.path=/vendor/firmware_mnt/image \
+    qcom_geni_serial.con_enabled=0 \
     androidboot.selinux=permissive
 
 BOARD_BOOTCONFIG += \
