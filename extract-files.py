@@ -114,6 +114,9 @@ blob_fixups: blob_fixups_user_type = {
         .replace_needed('libbluetooth_audio_session_aidl.so', 'libbluetooth_audio_session_aidl_prebuilt.so'),
     'vendor/lib64/libaudio_aidl_conversion_common_ndk_prebuilt.so': blob_fixup()
         .replace_needed('android.media.audio.common.types-V4-ndk.so', 'android.media.audio.common.types-V3-ndk.so'),
+    'vendor/etc/seccomp_policy/gnss@2.0-qsap-location.policy': blob_fixup()
+        .add_line_if_missing('sched_get_priority_min: 1')
+        .add_line_if_missing('sched_get_priority_max: 1'),
 } # fmt: skip
 
 module = ExtractUtilsModule(
