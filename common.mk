@@ -40,15 +40,21 @@ PRODUCT_PACKAGES += \
     audio.r_submix.default \
     audio.usb.default \
     audioadsprpcd \
+    audiohalservice.qti \
     libagm_compress_plugin \
     libagm_mixer_plugin \
     libagm_pcm_plugin \
     libalsautilsv2.vendor \
+    libagmipcservice \
+    libaudiochargerlistener \
     libbatterylistener \
     libfmpal \
     libhfp_pal \
     libmediautils_vendor.vendor \
+    libmemunreachable.vendor \
+    libpalipcservice \
     libsndcardparser \
+    libsoundtriggerhal.qti \
     libvolumelistener \
     qti-audio-types-aidl-V1-ndk.vendor
 
