@@ -141,9 +141,6 @@ on post-fs-data
     # Setup folder for Pre-Activation Kill Switch app (PAKS)
     mkdir /mnt/vendor/persist/paks 02770 vendor_tcmd vendor_tcmd
 
-    # Create directory used by power_supply_logger
-    mkdir /data/vendor/power_supply_logger 0770 vendor_pwric log
-
     # Setup folder for native to transfer data to NativeDropBoxAgent
     mkdir /data/vendor/dropbox-add 0730 log diag
 
