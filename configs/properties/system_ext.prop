@@ -2,6 +2,7 @@
 audio.offload.disable=false
 audio.offload.gapless.enabled=false
 audio.offload.min.duration.secs=60
+ro.audio.ihaladaptervendorextension_enabled=true
 
 # Charger
 ro.charger.enable_suspend=1

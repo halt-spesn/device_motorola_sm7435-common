@@ -54,7 +54,8 @@ PRODUCT_PACKAGES += \
     libsndcardparser \
     libsoundtriggerhal.qti \
     libvolumelistener \
-    qti-audio-types-aidl-V1-ndk.vendor
+    qti-audio-types-aidl-V1-ndk.vendor \
+    qtiaudiohalvendorextn
 
 PRODUCT_PACKAGES += \
     libbundleaidl \
