@@ -2,6 +2,9 @@
 ## are from Motorola Moto G75 (paros) (16 W1UQ36H.73-28).
 ## variant: RETBR
 
+# Current blobs with ELF checks disabled:
+# libaudiocorehal.default, libaudiocorehal.qti, android.hardware.bluetooth.audio_sw depend on libaudioserviceexampleimpl, which depends on old AIDL versions.
+
 # ADSP
 vendor/bin/adsprpcd
 vendor/bin/loadalgo
@@ -25,8 +28,8 @@ vendor/lib/rfsa/adsp/libdsp_streamer_binning.so
 # Audio
 vendor/etc/vintf/manifest/audioeffectservice_qti.xml
 vendor/etc/vintf/manifest/manifest_audiocorehal_default.xml
-vendor/lib64/hw/libaudiocorehal.default.so
-vendor/lib64/hw/libaudiocorehal.qti.so
+vendor/lib64/hw/libaudiocorehal.default.so;DISABLE_CHECKELF
+vendor/lib64/hw/libaudiocorehal.qti.so;DISABLE_CHECKELF
 vendor/lib64/hw/libaudioeffecthal.qti.so
 vendor/lib64/libadm.so
 vendor/lib64/libar-pal.so
@@ -88,7 +91,7 @@ vendor/lib64/vendor.qti.hardware.fm-V1-ndk.so
 
 # Bluetooth (A2DP)
 vendor/lib64/hw/android.hardware.bluetooth.audio-impl-qti.so
-vendor/lib64/hw/android.hardware.bluetooth.audio_sw.so
+vendor/lib64/hw/android.hardware.bluetooth.audio_sw.so;DISABLE_CHECKELF
 vendor/lib64/hw/audio.bluetooth_qti.default.so
 vendor/lib64/btaudio_offload_if.so
 vendor/lib64/libbluetooth_audio_session_aidl_qti.so
