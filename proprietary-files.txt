@@ -26,11 +26,9 @@ vendor/lib/rfsa/adsp/libarc_htp_driver_skel.so
 vendor/lib/rfsa/adsp/libdsp_streamer_binning.so
 
 # Audio
-vendor/etc/vintf/manifest/audioeffectservice_qti.xml
-vendor/etc/vintf/manifest/manifest_audiocorehal_default.xml
-vendor/lib64/hw/libaudiocorehal.default.so;DISABLE_CHECKELF
+vendor/lib64/hw/libaudiocorehal.default.so;DISABLE_CHECKELF;REQUIRED=manifest_audiocorehal_default.xml
 vendor/lib64/hw/libaudiocorehal.qti.so;DISABLE_CHECKELF
-vendor/lib64/hw/libaudioeffecthal.qti.so
+vendor/lib64/hw/libaudioeffecthal.qti.so;REQUIRED=audioeffectservice_qti.xml
 vendor/lib64/libadm.so
 vendor/lib64/libar-pal.so
 vendor/lib64/libaualgo_azp_component.so
