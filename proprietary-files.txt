@@ -47,7 +47,7 @@ vendor/lib64/liblistensoundmodel2vendor.so
 vendor/lib64/liblistensoundmodelaidl.so
 vendor/lib64/libmcs.so
 vendor/lib64/libpal_net_if.so
-vendor/lib64/libqtigefar.so
+vendor/lib64/libqtigefar.so;DISABLE_DEPS
 vendor/lib64/vendor.qti.hardware.ListenSoundModelAidl-V1-ndk.so
 
 # Audio - old AIDL dependencies
