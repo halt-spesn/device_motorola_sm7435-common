@@ -5,8 +5,6 @@ on early-boot
     write /sys/module/subsystem_restart/parameters/disable_restart_work 0x0
 
 on early-init
-    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules exfat
-
     # Need to wait for platform path for UTAGs driver to succeed
     wait /dev/block/platform/soc/${ro.boot.bootdevice}/by-name/hw
 
