@@ -66,6 +66,24 @@ blob_fixups: blob_fixups_user_type = {
     'system_ext/priv-app/ims/ims.apk': blob_fixup()
         .apktool_patch('ims-patches'),
     (
+        'vendor/bin/poweropt-service',
+        'vendor/lib64/libaodoptfeature.so',
+        'vendor/lib64/hw/libaudioeffecthal.qti.so',
+        'vendor/lib64/libapengine.so',
+        'vendor/lib64/libdpps.so',
+        'vendor/lib64/libcamerapoweroptfeature.so',
+        'vendor/lib64/libgamepoweroptfeature.so',
+        'vendor/lib64/liblearningmodule.so',
+        'vendor/lib64/liboffscreenpoweroptfeature.so',
+        'vendor/lib64/libpowercallback.so',
+        'vendor/lib64/libpowercore.so',
+        'vendor/lib64/libpsmoptfeature.so',
+        'vendor/lib64/libsnapdragoncolor-manager.so',
+        'vendor/lib64/libstandbyfeature.so',
+        'vendor/lib64/libvideooptfeature.so',
+    ): blob_fixup()
+        .replace_needed('libtinyxml2.so', 'libtinyxml2-v34.so'),
+    (
         'vendor/lib64/hw/libaudiocorehal.default.so',
         'vendor/lib64/libaudioplatformconverter.qti.so',
         'vendor/lib64/libqtigefar.so',
