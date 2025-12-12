@@ -45,6 +45,7 @@ PRODUCT_PACKAGES += \
     libalsautilsv2.vendor \
     libagmipcservice \
     libaudiochargerlistener \
+    libaudioutils_shim \
     libbatterylistener \
     libfmpal \
     libhfp_pal \
