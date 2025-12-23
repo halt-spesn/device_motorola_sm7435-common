@@ -1,5 +1,5 @@
 #=============================================================================
-# Copyright (c) 2019-2021 Qualcomm Technologies, Inc.
+# Copyright (c) 2019-2023 Qualcomm Technologies, Inc.
 # All Rights Reserved.
 # Confidential and Proprietary - Qualcomm Technologies, Inc.
 #
@@ -29,9 +29,14 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #=============================================================================
-import /vendor/etc/init/hw/init.qti.kernel.test.rc
+import /vendor/etc/init/hw/init.qti.kernel.target.rc
 
 on early-init
+    # Set the console loglevel to < KERN_WARN
+    # Set the default message loglevel to KERN_INFO
+    write /proc/sys/kernel/printk "4 6 1 7"
+
+    exec_start gki.modprobe
     start vendor.modprobe
 
     # Mount tracefs in /sys/kernel/tracing as CONFIG_DEBUG_FS might be
@@ -47,8 +52,9 @@ on early-init
     write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1
 
 on init
-    wait_for_prop vendor.all.modules.ready 1
+    start memory-init-boot
 
+on post-fs
     # Create cgroup mount point for memory
     mkdir /sys/fs/cgroup/memory/bg 0750 root system
     write /sys/fs/cgroup/memory/bg/memory.swappiness 140
@@ -63,7 +69,6 @@ on init
     write /dev/cpuctl/foreground/cpu.uclamp.colocate 0
     write /dev/cpuctl/top-app/cpu.uclamp.colocate 1
 
-on post-fs
     # set aggressive read ahead for dm-0 and dm-1 during boot up
     write /sys/block/dm-0/queue/read_ahead_kb 2048
     write /sys/block/dm-1/queue/read_ahead_kb 2048
@@ -71,15 +76,9 @@ on post-fs
 
 on early-boot
     # Allow subsystem (modem etc) debugging
-    exec_background u:r:vendor_qti_init_shell_bg:s0 -- /vendor/bin/init.qti.write.sh /sys/kernel/boot_adsp/boot 1
-    exec_background u:r:vendor_qti_init_shell_bg:s0 -- /vendor/bin/init.qti.write.sh /sys/kernel/boot_cdsp/boot 1
     exec_background u:r:vendor_qti_init_shell_bg:s0 -- /vendor/bin/init.qti.write.sh /sys/devices/virtual/cvp/cvp/boot 1
 
 on boot
-    # Set the console loglevel to < KERN_WARN
-    # Set the default message loglevel to KERN_INFO
-    write /proc/sys/kernel/printk "4 6 1 7"
-
     # Allow access to dload sysfs node
     chown root system /sys/kernel/dload/emmc_dload
     chmod 0660 /sys/kernel/dload/emmc_dload
@@ -143,6 +142,9 @@ on property:persist.vendor.sys.rawdump_copy=1
 on property:persist.vendor.sys.rawdump_copy=0
     write /sys/kernel/dload/emmc_dload 0
 
+on property:vendor.memory.min_free_kbytes=*
+    write /proc/sys/vm/min_free_kbytes ${vendor.memory.min_free_kbytes}
+
 service kernel-boot /vendor/bin/sh /vendor/bin/init.qti.kernel.sh
     class core
     user root
@@ -167,6 +169,9 @@ on property:sys.boot_completed=1
     start kernel-boot
     start kernel-post-boot
 
+on property:vendor.pasr.enabled=false
+    stop pasr-hal
+
 on charger
     start kernel-post-boot
 
@@ -175,6 +180,15 @@ service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /system/vendor/etc/m
     user root
     group root
     disabled
+
+service gki.modprobe /vendor/bin/system_dlkm_modprobe.sh
+    class main
+    user root
+    group root system
+    disabled
+    stdio_to_kmsg
+    seclabel u:r:vendor_modprobe:s0
+    oneshot
 
 service vendor.modprobe /vendor/bin/vendor_modprobe.sh
     class main

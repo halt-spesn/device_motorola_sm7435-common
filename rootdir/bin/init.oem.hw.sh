@@ -539,6 +539,20 @@ append_match()
 	done
 }
 
+export_match()
+{
+	local prop_list=$1
+	local prop_value="$2"
+	local dest_prop
+	local IFS=','
+	# example: export="ro.vendor.product.display,ro.vendor.product.display.plain_text"
+	for dest_prop in $prop_list; do
+		fetch_prop=${dest_prop}
+		setprop $fetch_prop "$prop_value"
+		debug "export $fetch_prop='$prop_value'"
+	done
+}
+
 process_mappings()
 {
 	local pname=""
@@ -574,12 +588,12 @@ process_mappings()
 		[ "$pappend" ] && append_match $pappend "$matched_val"
 		if [ "$matched_val" ]; then
 			if [ "$pexport" ]; then
-				setprop $pexport "$matched_val"
+				export_match $pexport "$matched_val"
 				notice "exporting '$matched_val' into property $pexport"
 			fi
 		elif [ "$pexport" -a "$pdefault" ]; then
 			# if match is not found, proceed with default
-			setprop $pexport "$pdefault"
+			export_match $pexport "$pdefault"
 			notice "defaulting '$pdefault' into property $pexport"
 		fi
 
@@ -734,7 +748,7 @@ if [ "$xml_version" != "$version_fs" ]; then
 	[ -d $hw_mp/$ver_utag ] && $(echo "$xml_version" > $hw_mp/$ver_utag/ascii)
 fi
 
-#set_ro_vendor_incremental &
+set_ro_vendor_incremental &
 
 set_ro_hw_properties
 

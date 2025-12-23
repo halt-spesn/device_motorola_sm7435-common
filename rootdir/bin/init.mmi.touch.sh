@@ -197,9 +197,9 @@ setup_permissions()
 			  samsung)	key_path="/sys/devices/virtual/sec/sec_ts/"
 						key_files=$(ls $key_path 2>/dev/null)
 						# Set optional permissions to LSI touch tests
-						[ -f $touch_path/size ] && chgrp vendor_tcmd $touch_path/size
-						[ -f $touch_path/address ] && chgrp vendor_tcmd $touch_path/address
-						[ -f $touch_path/write ] && chgrp vendor_tcmd $touch_path/write
+						[ -f $touch_path/size ] && chown root:vendor_tcmd $touch_path/size
+						[ -f $touch_path/address ] && chown root:vendor_tcmd $touch_path/address
+						[ -f $touch_path/write ] && chown root:vendor_tcmd $touch_path/write
 						;;
 			   pixart)	key_path="/sys/bus/i2c/devices/1-0033"
 						key_files="selftest selftest_bin"
@@ -208,8 +208,7 @@ setup_permissions()
 						key_files=$(prepend f54 `ls $touch_path/f54/ 2>/dev/null`)
 						key_files=$key_files"reporting query stats";;
 			focaltech)	key_path="/proc/"
-						key_files="fts_tp_test ftxxxx-debug"
-						;;
+						key_files="ftxxxx-debug";;
 			   ilitek)	key_path="/proc/ilitek"
 						key_files="ioctl";;
 			   goodix)	key_path="/proc/"
@@ -222,7 +221,7 @@ setup_permissions()
 			   stmicro)	key_path="/proc/fts/"
 						key_files="driver_test"
 						# Set optional permissions to LSI touch tests
-						[ -f $touch_path/calibrate ] && chgrp vendor_tcmd $touch_path/calibrate
+						[ -f $touch_path/calibrate ] && chown root:vendor_tcmd $touch_path/calibrate
 						;;
 		esac
 		for entry in $key_files; do
@@ -231,14 +230,14 @@ setup_permissions()
 		done
 	fi
 	# Set permissions to enable factory touch tests
-	chgrp vendor_tcmd $touch_path/drv_irq
-	chgrp vendor_tcmd $touch_path/hw_irqstat
-	chgrp vendor_tcmd $touch_path/reset
+	chown root:vendor_tcmd $touch_path/drv_irq
+	chown root:vendor_tcmd $touch_path/hw_irqstat
+	chown root:vendor_tcmd $touch_path/reset
 
 	# Set permissions to allow Bug2Go access to touch statistics
-	chgrp log $touch_path/stats
+	chown root:log $touch_path/stats
 	# Erase is optional
-	[ -f $touch_path/erase_all ] && chgrp vendor_tcmd $touch_path/erase_all
+	[ -f $touch_path/erase_all ] && chown root:vendor_tcmd $touch_path/erase_all
 }
 
 read_touch_property()

@@ -49,7 +49,6 @@ on early-fs
     start vold
 
 on fs
-    start hwservicemanager
     mount_all --early
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
@@ -59,10 +58,22 @@ on fs
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
+    #Execute virtualization manager
+    on property:ro.vendor.vm.ssr.enable=
+        enable vendor.qvirtservice_rs
+        start  vendor.qvirtservice_rs
+    on property:ro.vendor.vm.ssr.enable=false
+        enable vendor.qvirtservice_rs
+        start  vendor.qvirtservice_rs
+    on property:ro.vendor.vm.ssr.enable=true
+        enable vendor.qvirtservice_rs
+        start  vendor.qvirtservice_rs
+        enable vendor.qvirtvendorservice
+        start  vendor.qvirtvendorservice
 
 on late-fs
+    #exec_start wait_for_keymaster
     mount_all --late
-    chown system system /sys/class/power_supply/battery/device/force_charging_disable
 
 on post-fs-data
     mkdir /vendor/data/tombstones 0771 system system
@@ -92,6 +103,12 @@ on boot
     #USB controller configuration
     setprop vendor.usb.controller a600000.dwc3
 
+on property:vendor.display.lcd_density=560
+   setprop dalvik.vm.heapgrowthlimit 256m
+
+on property:vendor.display.lcd_density=640
+   setprop dalvik.vm.heapgrowthlimit 512m
+
 on init && property:ro.boot.mode=charger
     wait_for_prop vendor.all.modules.ready 1
     mount_all /vendor/etc/charger_fw_fstab.qti --early
@@ -102,6 +119,7 @@ on charger
     start vendor.power_off_alarm
     setprop sys.usb.controller a600000.dwc3
 #    wait /sys/class/udc/${sys.usb.controller}
+    setprop sys.usb.configfs 1
 
 #service vendor.lowi /vendor/bin/sscrpcd
 #   class core
@@ -148,6 +166,3 @@ on early-boot && property:persist.vendor.pcie.boot_option=*
     write /sys/bus/platform/devices/1c00000.qcom,pcie/debug/boot_option ${persist.vendor.pcie.boot_option}
     write /sys/bus/platform/devices/1c08000.qcom,pcie/debug/boot_option ${persist.vendor.pcie.boot_option}
 
-on property:vendor.post_boot.parsed=1
-    enable vendor.qvirtmgr
-    start  vendor.qvirtmgr

@@ -857,7 +857,7 @@ function start_hbtp()
 }
 
 case "$target" in
-        "parrot")
+        "pineapple")
                 if [ -f /sys/devices/soc0/chip_family ]; then
                         chip_family_id=`cat /sys/devices/soc0/chip_family`
                 else
@@ -867,16 +867,16 @@ case "$target" in
                 echo "adsprpc : chip_family_id : $chip_faily_id" > /dev/kmsg
 
                 case "$chip_family_id" in
-                    "0x84")
-                    if [ -f /sys/devices/platform/soc/soc:qcom,msm_fastrpc/fastrpc_cdsp_status ]; then
-                        fastrpc_cdsp_status=`cat /sys/devices/platform/soc/soc:qcom,msm_fastrpc/fastrpc_cdsp_status`
+                    "0x8a")
+                    if [ -f /sys/devices/platform/soc/soc:qcom,msm_fastrpc/fastrpc_nsp_status ]; then
+                        fastrpc_nsp_status=`cat /sys/devices/platform/soc/soc:qcom,msm_fastrpc/fastrpc_nsp_status`
                     else
-                        fastrpc_cdsp_status=-1
+                        fastrpc_nsp_status=-1
                     fi
 
-                    echo "adsprpc : fastrpc_cdsp_status : $fastrpc_cdsp_status" > /dev/kmsg
+                    echo "adsprpc : fastrpc_nsp_status : $fastrpc_nsp_status" > /dev/kmsg
 
-                    if [ $fastrpc_cdsp_status -eq 0 ]; then
+                    if [ $fastrpc_nsp_status -eq 0 ]; then
                             setprop vendor.fastrpc.disable.cdsprpcd.daemon 1
                             echo "adsprpc : Disabled cdsp daemon" > /dev/kmsg
                     fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env -S PYTHONPATH=../../../tools/extract-utils python3
 #
-# SPDX-FileCopyrightText: 2025 The LineageOS Project
+# SPDX-FileCopyrightText: 2025-2026 The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
 
@@ -25,16 +25,17 @@ namespace_imports = [
     'hardware/qcom-caf/sm8450-6.6',
     'hardware/qcom-caf/wlan',
     'vendor/qcom/opensource/commonsys/display',
+    'vendor/qcom/opensource/commonsys-intf/display',
     'vendor/qcom/opensource/dataservices',
 ]
 
 libs_add_vendor_suffix = (
-    'vendor.qti.hardware.qccsyshal@1.0',
-    'vendor.qti.hardware.qccsyshal@1.1',
-    'vendor.qti.qspmhal@1.0',
-    'vendor.qti.imsrtpservice@3.0',
-    'vendor.qti.diaghal@1.0',
     'com.qualcomm.qti.dpm.api@1.0',
+    'vendor.qti.ImsRtpService-V1-ndk',
+    'vendor.qti.diaghal-V1-ndk',
+    'vendor.qti.hardware.dpmaidlservice-V1-ndk',
+    'vendor.qti.qccsyshal_aidl-V1-ndk',
+    'vendor.qti.qccvndhal_aidl-V1-ndk',
 )
 
 def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
@@ -51,39 +52,56 @@ lib_fixups: lib_fixups_user_type = {
 
 
 blob_fixups: blob_fixups_user_type = {
-    'system_ext/etc/permissions/moto-telephony.xml': blob_fixup().regex_replace(
-        '/system/', '/system_ext/'
-    ),
-    ('vendor/bin/hw/android.hardware.security.keymint-service-qti', 'vendor/lib64/libqtikeymint.so'): blob_fixup()
-        .add_needed('android.hardware.security.rkp-V1-ndk.so')
-        .replace_needed(
-            'android.hardware.security.keymint-V1-ndk_platform.so',
-            'android.hardware.security.keymint-V1-ndk.so',
-        )
-        .replace_needed(
-            'android.hardware.security.secureclock-V1-ndk_platform.so',
-            'android.hardware.security.secureclock-V1-ndk.so',
-        )
-        .replace_needed(
-            'android.hardware.security.sharedsecret-V1-ndk_platform.so',
-            'android.hardware.security.sharedsecret-V1-ndk.so',
-        ),
-    'vendor/lib64/vendor.libdpmframework.so': blob_fixup()
-        .add_needed('libhidlbase_shim.so'),
     'vendor/lib64/libqcodec2_core.so': blob_fixup()
         .add_needed('libcodec2_shim.so'),
-    'vendor/lib64/sensors.moto.so': blob_fixup()
-        .add_needed('libbase_shim.so'),
+    'system_ext/etc/permissions/moto-telephony.xml': blob_fixup()
+        .regex_replace('/system/', '/system_ext/'),
     (
        'vendor/etc/media_codecs_parrot_v0.xml',
        'vendor/etc/media_codecs_ravelin.xml',
     ): blob_fixup()
         .regex_replace('.+media_codecs_(google_audio|google_c2|google_telephony|vendor_audio|dolby_audio).+\n', ''),
-    'vendor/etc/sensors/hals.conf': blob_fixup():
+    'vendor/etc/sensors/hals.conf': blob_fixup()
         .add_line_if_missing('sensors.moto_ext.so'),
-    'system_ext/priv-app/ims/ims.apk': blob_fixup().apktool_patch(
-        'ims-patches'
-    ),
+    'system_ext/priv-app/ims/ims.apk': blob_fixup()
+        .apktool_patch('ims-patches'),
+    (
+        'vendor/lib64/hw/libaudiocorehal.default.so',
+        'vendor/lib64/libaudioplatformconverter.qti.so',
+        'vendor/lib64/libqtigefar.so',
+    ): blob_fixup()
+        .replace_needed('android.hardware.audio.core-V2-ndk.so', 'android.hardware.audio.core-V3-ndk.so')
+        .replace_needed('android.media.audio.common.types-V3-ndk.so', 'android.media.audio.common.types-V4-ndk.so'),
+    'vendor/lib64/hw/libaudiocorehal.qti.so': blob_fixup()
+        .replace_needed('android.media.audio.common.types-V3-ndk.so', 'android.media.audio.common.types-V4-ndk.so')
+        .replace_needed('android.hardware.audio.core-V2-ndk.so', 'android.hardware.audio.core-V3-ndk.so')
+        .replace_needed('android.hardware.audio.effect-V2-ndk.so', 'android.hardware.audio.effect-V3-ndk.so')
+        .replace_needed('android.hardware.audio.core.sounddose-V1-ndk.so', 'android.hardware.audio.core.sounddose-V3-ndk.so')
+        .replace_needed('android.hardware.audio.common-V1-ndk.so', 'android.hardware.audio.common-V4-ndk.so'),
+    'vendor/lib64/hw/android.hardware.bluetooth.audio_sw.so': blob_fixup()
+        .replace_needed('android.hardware.audio.core-V2-ndk.so', 'android.hardware.audio.core-V3-ndk.so')
+        .replace_needed('android.media.audio.common.types-V3-ndk.so', 'android.media.audio.common.types-V4-ndk.so')
+        .replace_needed('android.hardware.bluetooth.audio-V4-ndk.so', 'android.hardware.bluetooth.audio-V5-ndk.so'),
+    (
+        'vendor/lib64/btaudio_offload_if.so',
+        'vendor/lib64/hw/android.hardware.bluetooth.audio-impl-qti.so',
+        'vendor/lib64/hw/audio.bluetooth_qti.default.so',
+        'vendor/lib64/libbluetooth_audio_session_aidl_qti.so',
+    ): blob_fixup()
+        .replace_needed('android.hardware.bluetooth.audio-V4-ndk.so', 'android.hardware.bluetooth.audio-V5-ndk.so'),
+    (
+        'vendor/bin/qguard',
+        'vendor/lib64/libqcodec2_utils.so',
+        'vendor/lib64/libqtiperfd.so',
+    ): blob_fixup()
+        .replace_needed('vendor.qti.hardware.display.config-V5-ndk.so', 'vendor.qti.hardware.display.config-V12-ndk.so'),
+    (
+        'vendor/lib64/liboemcrypto.so',
+        'vendor/lib64/libops.so',
+    ): blob_fixup()
+        .replace_needed('vendor.qti.hardware.display.config-V7-ndk.so', 'vendor.qti.hardware.display.config-V12-ndk.so'),
+    'vendor/lib64/libsensorndkbridge.so': blob_fixup()
+        .replace_needed('android.hardware.sensors-V2-ndk.so', 'android.hardware.sensors-V3-ndk.so'),
 } # fmt: skip
 
 module = ExtractUtilsModule(

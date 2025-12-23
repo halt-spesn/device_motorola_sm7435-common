@@ -31,7 +31,6 @@
 #=============================================================================
 
 function configure_zram_parameters() {
-	# Moto yangbq2: Skip this if we are using zram from fstab.
 	using_zram_from_fstab=`getprop ro.boot.using_zram_from_fstab`
 	if [ "$using_zram_from_fstab" == "true" ]; then
 		return
@@ -80,6 +79,21 @@ function configure_zram_parameters() {
 	fi
 }
 
+verify_pasr_support()
+{
+	ddr_type=`od -An -tx /proc/device-tree/memory/ddr_device_type`
+	ddr_type5="08"
+
+	if [ -d /sys/kernel/mem-offline ]; then
+		#only LPDDR5 supports PAAR
+		if [ ${ddr_type:4:2} != $ddr_type5 ]; then
+			setprop vendor.pasr.activemode.enabled false
+		fi
+
+		setprop vendor.pasr.enabled true
+	fi
+}
+
 function configure_read_ahead_kb_values() {
 	MemTotalStr=`cat /proc/meminfo | grep MemTotal`
 	MemTotal=${MemTotalStr:16:8}
@@ -97,9 +111,7 @@ function configure_read_ahead_kb_values() {
 		ra_kb=512
 	fi
 	for dm in $dmpts; do
-		if [ `cat $(dirname $dm)/../removable` -eq 0 ]; then
-			echo $ra_kb > $dm
-		fi
+		echo $ra_kb > $dm
 	done
 	if [ -f /sys/block/mmcblk0/bdi/read_ahead_kb ]; then
 		echo $ra_kb > /sys/block/mmcblk0/bdi/read_ahead_kb
@@ -118,12 +130,6 @@ function configure_memory_parameters() {
 	# Disable periodic kcompactd wakeups. We do not use THP, so having many
 	# huge pages is not as necessary.
 	echo 0 > /proc/sys/vm/compaction_proactiveness
-	# With THP enabled, the kernel greatly increases min_free_kbytes over its
-	# default value. Disable THP to prevent resetting of min_free_kbytes
-	# value during online/offline pages.
-	if [ -f /sys/kernel/mm/transparent_hugepage/enabled ]; then
-		echo never > /sys/kernel/mm/transparent_hugepage/enabled
-	fi
 
 	MemTotalStr=`cat /proc/meminfo | grep MemTotal`
 	MemTotal=${MemTotalStr:16:8}
@@ -139,35 +145,47 @@ function configure_memory_parameters() {
 	else
 		echo 4096 > /proc/sys/vm/min_free_kbytes
 	fi
-	# Disable wsf for all targets beacause we are using efk.
-	# wsf Range : 1..1000 So set to bare minimum value 1.
-	echo 1 > /proc/sys/vm/watermark_scale_factor
+
+	KernelVersion=`getprop ro.kernel.version`
+	Major=$(echo $KernelVersion | cut -d'.' -f1)
+	Minor=$(echo $KernelVersion | cut -d'.' -f2)
+	if [ $Major -lt 5 ] || { [ $Major -eq 5 ] && [ $Minor -le 10 ]; }; then
+		# Disable wsf for all targets beacause we are using efk.
+		# wsf Range : 1..1000 So set to bare minimum value 1.
+	product_name=`getprop ro.product.device`
+	if [ "$product_name" != "cuscoi" ]; then
+	    echo 1 > /proc/sys/vm/watermark_scale_factor
+	fi
+	fi
 
 	#Set per-app max kgsl reclaim limit and per shrinker call limit
 	if [ -f /sys/class/kgsl/kgsl/page_reclaim_per_call ]; then
 		echo 38400 > /sys/class/kgsl/kgsl/page_reclaim_per_call
+
 	fi
 	if [ -f /sys/class/kgsl/kgsl/max_reclaim_limit ]; then
 		echo 25600 > /sys/class/kgsl/kgsl/max_reclaim_limit
 	fi
+
+	verify_pasr_support
 }
 
 # Set Memory parameters.
 configure_memory_parameters
 
-if [ -f /sys/devices/soc0/soc_id ]; then
-	platformid=`cat /sys/devices/soc0/soc_id`
+if [ -f /sys/devices/soc0/chip_family ]; then
+  chipfamily=`cat /sys/devices/soc0/chip_family`
 fi
 
-case "$platformid" in
-	"537" | "583" | "613" | "631" | "633" | "634" | "638" | "663")
-		/vendor/bin/sh /vendor/bin/init.kernel.post_boot-parrot.sh
-		;;
-	"568" | "602" | "581" | "582")
-		/vendor/bin/sh /vendor/bin/init.kernel.post_boot-ravelin.sh
-		;;
-	*)
-		echo "***WARNING***: Invalid SoC ID\n\t No postboot settings applied!!\n"
-		;;
+case "$chipfamily" in
+  "0x84")
+          /vendor/bin/sh /vendor/bin/init.kernel.post_boot-parrot.sh
+          ;;
+  "0x8d")
+          /vendor/bin/sh /vendor/bin/init.kernel.post_boot-ravelin.sh
+          ;;
+  *)
+          echo "***WARNING***: Invalid chip family\n\t No postboot settings applied!!\n"
+          ;;
 esac
 
