@@ -416,6 +416,9 @@ on property:sys.boot_completed=1
     chown media audio /sys/kernel/aud_dev/state
     write /sys/devices/virtual/cvp/cvp/boot 1
 
+    # Enable PowerHAL hint processing
+    setprop vendor.powerhal.init 1
+
 # corefile limit
 on property:persist.debug.trace=1
     mkdir /data/core 0777 root root
@@ -524,4 +527,3 @@ on property:vendor.opengles.version=*
 #Set gpu available frequencies property
 on property:vendor.gpu.available_frequencies=*
     setprop ro.vendor.gpu.available_frequencies ${vendor.gpu.available_frequencies}
-
