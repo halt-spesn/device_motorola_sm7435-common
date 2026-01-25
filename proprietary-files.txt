@@ -2,9 +2,6 @@
 ## are from Motorola Moto G75 (paros) (16 W1UQ36H.73-28).
 ## variant: RETBR
 
-# Current blobs with ELF checks disabled:
-# android.hardware.bluetooth.audio_sw depends on libaudioserviceexampleimpl, which depends on old AIDL versions.
-
 # ADSP
 vendor/bin/adsprpcd
 vendor/bin/loadalgo
@@ -52,7 +49,7 @@ vendor/lib64/vendor.qti.hardware.ListenSoundModelAidl-V1-ndk.so
 
 # Audio - old AIDL dependencies
 vendor/lib64/android.hardware.bluetooth.audio-impl.so:vendor/lib64/android.hardware.bluetooth.audio-impl_prebuilt.so;FIX_SONAME
-vendor/lib64/libaudio_aidl_conversion_common_ndk.so:vendor/lib64/libaudio_aidl_conversion_common_ndk_prebuilt.so;FIX_SONAME
+vendor/lib64/libaudio_aidl_conversion_common_ndk.so:vendor/lib64/libaudio_aidl_conversion_common_ndk_prebuilt.so;DISABLE_DEPS;FIX_SONAME
 vendor/lib64/libaudioserviceexampleimpl.so;DISABLE_DEPS
 vendor/lib64/libbluetooth_audio_session_aidl.so:vendor/lib64/libbluetooth_audio_session_aidl_prebuilt.so;FIX_SONAME
 
@@ -95,7 +92,7 @@ vendor/lib64/vendor.qti.hardware.fm-V1-ndk.so|2f383fde083013a9597872d4cae9ac827b
 
 # Bluetooth (A2DP) - from pdx257 72.1.A.2.127
 vendor/lib64/hw/android.hardware.bluetooth.audio-impl-qti.so|f7493d5079e037f101e5b6499b0d039b71536394
-vendor/lib64/hw/android.hardware.bluetooth.audio_sw.so;DISABLE_CHECKELF|87a698117c392c2cc30ac012a56d25da734cc546
+vendor/lib64/hw/android.hardware.bluetooth.audio_sw.so;DISABLE_DEPS|87a698117c392c2cc30ac012a56d25da734cc546
 vendor/lib64/hw/audio.bluetooth_qti.default.so|6f43000b9018af2facb494c601359d9f1883457c
 vendor/lib64/btaudio_offload_if.so|005226ff201c489927125121f456321d7ed67c50
 vendor/lib64/libbluetooth_audio_session_aidl_qti.so|7f768cf5d445e190e15bdb2b5250f6375b27a921
