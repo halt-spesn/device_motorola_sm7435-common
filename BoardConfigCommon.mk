@@ -63,8 +63,7 @@ BOARD_KERNEL_CMDLINE += \
     disable_dma32=on \
     nosoftlockup \
     printk.devkmsg=on \
-    qcom_geni_serial.con_enabled=0 \
-    androidboot.selinux=permissive
+    qcom_geni_serial.con_enabled=0
 
 BOARD_BOOTCONFIG += \
     androidboot.hardware=qcom \
