@@ -60,10 +60,10 @@ BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 # Kernel
 BOARD_KERNEL_CMDLINE += \
     console=ttynull \
-    disable_dma32=on \
     nosoftlockup \
     printk.devkmsg=on \
-    qcom_geni_serial.con_enabled=0
+    qcom_geni_serial.con_enabled=0 \
+    firmware_class.path=/vendor/firmware_mnt/image
 
 BOARD_BOOTCONFIG += \
     androidboot.hardware=qcom \
@@ -120,7 +120,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(RAMDISK_MODULES_PATH)/mo
 BOARD_USES_METADATA_PARTITION := true
 
 # Partitions
--include vendor/lineage/config/BoardConfigReservedSize.mk
+-include vendor/voltage/config/BoardConfigReservedSize.mk
 BOARD_BUILD_VENDOR_RAMDISK_IMAGE := true
 
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 32)
@@ -158,7 +158,7 @@ TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom
 ENABLE_VENDOR_RIL_SERVICE := true
 
 # SELinux
-include device/lineage/sepolicy/libperfmgr/sepolicy.mk
+include device/voltage/sepolicy/libperfmgr/sepolicy.mk
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 include hardware/motorola/sepolicy/qti/SEPolicy.mk
 
