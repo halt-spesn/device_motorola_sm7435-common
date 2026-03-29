@@ -401,6 +401,13 @@ PRODUCT_PACKAGES += \
 # Multitouch
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
+    
+# Touch
+PRODUCT_PACKAGES += \
+    vendor.lineage.touch-service.motorola \
+    vendor.lineage.touch-service.moto_sm7435
+
+$(call soong_config_set, MOTOROLA_TOUCH, HIGH_TOUCH_POLLING_PATH, /sys/class/touchscreen/primary/interpolation)
 
 # Update engine
 PRODUCT_PACKAGES += \
