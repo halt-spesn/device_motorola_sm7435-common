@@ -129,7 +129,6 @@ ro.vendor.bluetooth.csip_qti=true
 
 # Camera
 camera.disable_zsl_mode=1
-persist.vendor.camera.privapp.list=com.motorola.camera3
 
 # Crypto
 ro.crypto.metadata_init_delete_all_keys.enabled=false
