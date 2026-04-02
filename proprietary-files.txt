@@ -247,21 +247,6 @@ vendor/lib64/libsdmextension.so
 vendor/lib64/libtestutils.so
 vendor/lib64/libvmfilexfer.so
 
-# Display configurations
-vendor/etc/display/DPU10__.xml
-vendor/etc/display/DPU660.xml
-vendor/etc/display/DPU830.xml
-vendor/etc/display/DPU860.xml
-vendor/etc/display/DPU9__.xml
-vendor/etc/display/advanced_sf_offsets.xml
-vendor/etc/display/camera_alignments.json
-vendor/etc/display/cpu_alignments.json
-vendor/etc/display/default_alignments.json
-vendor/etc/display/display_alignments.json
-vendor/etc/display/formats.json
-vendor/etc/display/graphics_alignments.json
-vendor/etc/display/ubwc_alignments.json
-vendor/etc/display/video_alignments.json
 
 # Display postprocessing
 vendor/bin/hw/vendor.qti.hardware.display.color-service
