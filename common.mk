@@ -474,12 +474,18 @@ $(foreach variant,$(TARGET_WIFI_VARIANTS), \
         firmware_$(variant)_wlan_mac.bin_symlink \
         firmware_$(variant)_WCNSS_qcom_cfg.ini_symlink \
         firmware_wlanmdsp.otaupdate_symlink) \
+    $(if $(wildcard $(LOCAL_PATH)/configs/wifi/$(variant)/WCNSS_mot_cfg.ini), \
+        $(eval PRODUCT_PACKAGES += \
+            firmware_$(variant)_WCNSS_mot_cfg.ini_symlink)) \
 )
 
 # WiFi config files
 $(foreach variant,$(TARGET_WIFI_VARIANTS), \
     $(eval PRODUCT_COPY_FILES += \
         $(LOCAL_PATH)/configs/wifi/$(variant)/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/$(variant)/WCNSS_qcom_cfg.ini) \
+    $(if $(wildcard $(LOCAL_PATH)/configs/wifi/$(variant)/WCNSS_mot_cfg.ini), \
+        $(eval PRODUCT_COPY_FILES += \
+            $(LOCAL_PATH)/configs/wifi/$(variant)/WCNSS_mot_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/$(variant)/WCNSS_mot_cfg.ini)) \
 )
 
 PRODUCT_COPY_FILES += \

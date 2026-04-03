@@ -35,6 +35,13 @@ install_symlink {
 }
 
 install_symlink {
+    name: "firmware_adrastea_WCNSS_mot_cfg.ini_symlink",
+    vendor: true,
+    installed_location: "firmware/wlan/qca_cld/adrastea/WCNSS_mot_cfg.ini",
+    symlink_target: "/vendor/etc/wifi/adrastea/WCNSS_mot_cfg.ini",
+}
+
+install_symlink {
     name: "firmware_qca6490_wlan_mac.bin_symlink",
     vendor: true,
     installed_location: "firmware/wlan/qca_cld/qca6490/wlan_mac.bin",
