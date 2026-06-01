@@ -150,6 +150,8 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.demura-service \
     vendor.qti.hardware.display.snapalloc-impl
 
+$(call soong_config_set_bool,qtidisplay,legacy_pphwresourceinfo,true)
+
 PRODUCT_COPY_FILES += \
     hardware/qcom-caf/sm8450-6.6/display/hal/config/snapdragon_color_libs_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/snapdragon_color_libs_config.xml
 
