@@ -63,7 +63,8 @@ BOARD_KERNEL_CMDLINE += \
     nosoftlockup \
     printk.devkmsg=on \
     qcom_geni_serial.con_enabled=0 \
-    firmware_class.path=/vendor/firmware_mnt/image
+    firmware_class.path=/vendor/firmware_mnt/image \
+    sysctl.kernel.firmware_config.force_sysfs_fallback=1
 
 BOARD_BOOTCONFIG += \
     androidboot.hardware=qcom \

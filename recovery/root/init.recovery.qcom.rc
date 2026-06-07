@@ -27,6 +27,24 @@
 
 import init.recovery.${ro.boot.device}.rc
 
+on early-init
+    insmod /lib/modules/sensors_class.ko
+    insmod /lib/modules/mmi_relay.ko
+    insmod /lib/modules/mmi_annotate.ko
+    insmod /lib/modules/mmi_info.ko
+    insmod /lib/modules/touchscreen_mmi.ko
+    insmod /lib/modules/focaltech_v3_4.ko
+    insmod /lib/modules/goodix_brl_mmi.ko
+    insmod /lib/modules/snd_event_dlkm.ko
+    insmod /lib/modules/q6_pdr_dlkm.ko
+    insmod /lib/modules/q6_notifier_dlkm.ko
+    insmod /lib/modules/gpr_dlkm.ko
+    insmod /lib/modules/spf_core_dlkm.ko
+    insmod /lib/modules/adsp_loader_dlkm.ko
+    insmod /lib/modules/mmi_charger.ko
+    insmod /lib/modules/bm_adsp_ulog.ko
+    insmod /lib/modules/qti_glink_charger.ko
+
 on init
     setprop sys.usb.configfs 1
 
@@ -37,3 +55,13 @@ on property:ro.boot.usbcontroller=*
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+    # Load ADSP firmware for PMIC
+    mkdir /firmware
+    mount ext4 /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro context=u:object_r:firmware_file:s0
+
+on property:dev.mnt.blk.firmware=*
+    write /sys/kernel/boot_adsp/boot 1
+
+on property:init.svc.fastbootd=running
+    umount /firmware
