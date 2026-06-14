@@ -21,4 +21,3 @@ libSNPE.so
 libc++_shared.so
 libBSTbase_share.so
 libBSTSWAD.so
-libudfpshandler.so
