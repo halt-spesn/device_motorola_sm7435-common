@@ -84,38 +84,86 @@ BOARD_RAMDISK_USE_LZ4 := true
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 TARGET_KERNEL_NO_GCC := true
 
-# Prebuilt Kernel
-BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
-PREBUILT_PATH := $(DEVICE_PATH)-kernel
-
-INLINE_KERNEL_BUILDING := true
-TARGET_FORCE_PREBUILT_KERNEL := true
-TARGET_NO_KERNEL := false
-BOARD_KERNEL_BINARIES := kernel
+TARGET_KERNEL_SOURCE := kernel/motorola/sm7435
 TARGET_KERNEL_VERSION := 6.6
-PREBUILT_PATH := $(DEVICE_PATH)-kernel
-TARGET_NO_KERNEL_OVERRIDE := true
-TARGET_KERNEL_SOURCE := $(PREBUILT_PATH)/kernel-headers
-BOARD_PREBUILT_DTBIMAGE_DIR := $(PREBUILT_PATH)/dtbs/
-BOARD_PREBUILT_DTBOIMAGE := $(PREBUILT_PATH)/dtbo.img
-PRODUCT_COPY_FILES += \
-    $(PREBUILT_PATH)/kernel:kernel
+
+TARGET_KERNEL_CONFIG := \
+    gki_defconfig \
+    vendor/parrot_perf.config \
+    vendor/ext_config/moto-parrot.config \
+    vendor/ext_config/moto-parrot-cuscoi.config
 
 # Kernel modules
-DLKM_MODULES_PATH := $(PREBUILT_PATH)/vendor_dlkm
-RAMDISK_MODULES_PATH := $(PREBUILT_PATH)/vendor_ramdisk
-SYSTEM_DLKM_MODULES_PATH := $(PREBUILT_PATH)/system_dlkm/
+BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(DEVICE_PATH)/modules/modules.blocklist.vendor_dlkm
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(DEVICE_PATH)/modules/modules.blocklist.vendor_boot
+BOARD_SYSTEM_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules/modules.load.system_dlkm))
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules/modules.load.vendor_dlkm))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules/modules.load.vendor_boot))
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules/modules.load.vendor_boot $(DEVICE_PATH)/modules/modules.load.recovery))
+BOOT_KERNEL_MODULES := $(BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD)
+SYSTEM_KERNEL_MODULES := $(BOARD_SYSTEM_KERNEL_MODULES_LOAD)
 
-BOARD_SYSTEM_KERNEL_MODULES := $(wildcard $(SYSTEM_DLKM_MODULES_PATH)/*.ko)
-BOARD_SYSTEM_KERNEL_MODULES_LOAD := $(patsubst %,$(SYSTEM_DLKM_MODULES_PATH)/%,$(shell cat $(SYSTEM_DLKM_MODULES_PATH)/modules.load))
-BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(DLKM_MODULES_PATH)/*.ko)
-BOARD_VENDOR_KERNEL_MODULES_LOAD := $(patsubst %,$(DLKM_MODULES_PATH)/%,$(shell cat $(DLKM_MODULES_PATH)/modules.load))
-BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(DLKM_MODULES_PATH)/modules.blocklist
+TARGET_KERNEL_EXT_MODULE_ROOT := kernel/motorola/sm7435-modules
+TARGET_KERNEL_EXT_MODULES := \
+    qcom/opensource/mmrm-driver \
+    qcom/opensource/mm-drivers/msm_ext_display \
+    qcom/opensource/mm-drivers/sync_fence \
+    qcom/opensource/audio-kernel \
+    qcom/opensource/securemsm-kernel \
+    qcom/opensource/synx-kernel \
+    qcom/opensource/camera-kernel \
+    qcom/opensource/data-kernel/drivers/smem-mailbox \
+    qcom/opensource/datarmnet-ext/mem \
+    qcom/opensource/dataipa/drivers/platform/msm \
+    qcom/opensource/datarmnet/core \
+    qcom/opensource/datarmnet-ext/aps \
+    qcom/opensource/datarmnet-ext/offload \
+    qcom/opensource/datarmnet-ext/perf \
+    qcom/opensource/datarmnet-ext/perf_tether \
+    qcom/opensource/datarmnet-ext/sch \
+    qcom/opensource/datarmnet-ext/shs \
+    qcom/opensource/datarmnet-ext/wlan \
+    qcom/opensource/display-drivers/msm \
+    qcom/opensource/dsp-kernel \
+    qcom/opensource/graphics-kernel \
+    qcom/opensource/spu-kernel \
+    qcom/opensource/touch-drivers \
+    qcom/opensource/video-driver \
+    qcom/opensource/wlan/platform \
+    qcom/opensource/wlan/qcacld-3.0/.adrastea \
+    qcom/opensource/bt-kernel \
+    nxp/opensource/driver \
+    st/opensource/driver \
 
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(wildcard $(RAMDISK_MODULES_PATH)/*.ko)
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(patsubst %,$(RAMDISK_MODULES_PATH)/%,$(shell cat $(RAMDISK_MODULES_PATH)/modules.load))
-BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD  := $(patsubst %,$(RAMDISK_MODULES_PATH)/%,$(shell cat $(RAMDISK_MODULES_PATH)/modules.load.recovery))
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(RAMDISK_MODULES_PATH)/modules.blocklist
+TARGET_KERNEL_EXT_MODULES += \
+    motorola/drivers/mmi_annotate \
+    motorola/drivers/mmi_info \
+    motorola/drivers/moto_f_usbnet \
+    motorola/drivers/moto_reboot_reason \
+    motorola/drivers/watchdogtest \
+    motorola/drivers/mmi_relay \
+    motorola/drivers/sensors \
+    motorola/drivers/input/touchscreen/touchscreen_mmi \
+    motorola/drivers/power/qti_glink_charger \
+    motorola/drivers/power/qpnp_adaptive_charge \
+    motorola/drivers/power/mmi_charger \
+    motorola/drivers/power/adsp_glink_charger \
+    motorola/drivers/power/bm_adsp_ulog \
+    motorola/drivers/misc/mmi_sys_temp \
+    motorola/drivers/moto_mmap_fault \
+    motorola/drivers/input/touchscreen/goodix_berlin_mmi \
+    motorola/drivers/input/touchscreen/focaltech_touch_v3_4 \
+    motorola/drivers/misc/sx937x_sar \
+    motorola/drivers/misc/awinic_sar \
+    motorola/drivers/wlan_antenna \
+    motorola/drivers/regulator/wl2866d \
+    motorola/drivers/input/touchscreen/goodix_thp \
+    motorola/drivers/input/misc/anc_fps_mmi \
+    motorola/drivers/moto_mm \
+    motorola/drivers/moto_swap \
+    motorola/drivers/moto_sched \
+    motorola/drivers/moto_netopt/con_dfpar \
+    motorola/drivers/moto_binder
 
 # Metadata
 BOARD_USES_METADATA_PARTITION := true
