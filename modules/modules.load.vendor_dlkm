@@ -270,7 +270,6 @@ frpc-adsprpc.ko
 msm_ext_display.ko
 sync_fence.ko
 msm-mmrm.ko
-mmrm_test_module.ko
 stm_nfc_i2c.ko
 nxp-nci.ko
 qcedev-mod_dlkm.ko
