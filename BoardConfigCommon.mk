@@ -147,17 +147,17 @@ TARGET_KERNEL_EXT_MODULES += \
     motorola/drivers/power/qti_glink_charger \
     motorola/drivers/power/qpnp_adaptive_charge \
     motorola/drivers/power/mmi_charger \
-    motorola/drivers/power/adsp_glink_charger \
     motorola/drivers/power/bm_adsp_ulog \
     motorola/drivers/misc/mmi_sys_temp \
     motorola/drivers/moto_mmap_fault \
     motorola/drivers/input/touchscreen/goodix_berlin_mmi \
     motorola/drivers/input/touchscreen/focaltech_touch_v3_4 \
-    motorola/drivers/misc/sx937x_sar \
-    motorola/drivers/misc/awinic_sar \
+    motorola/drivers/misc/sx937x \
+    motorola/drivers/misc/awinic/sarsensor \
     motorola/drivers/wlan_antenna \
     motorola/drivers/regulator/wl2866d \
-    motorola/drivers/input/touchscreen/goodix_thp \
+    motorola/drivers/input/misc/goodix_fod_mmi \
+    motorola/drivers/misc/utag \
     motorola/drivers/input/misc/anc_fps_mmi \
     motorola/drivers/moto_mm \
     motorola/drivers/moto_swap \
