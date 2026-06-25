@@ -126,7 +126,6 @@ TARGET_KERNEL_EXT_MODULES := \
     qcom/opensource/display-drivers/msm \
     qcom/opensource/dsp-kernel \
     qcom/opensource/graphics-kernel \
-    qcom/opensource/spu-kernel \
     qcom/opensource/video-driver \
     qcom/opensource/wlan/platform \
     qcom/opensource/wlan/qcacld-3.0/.adrastea \
