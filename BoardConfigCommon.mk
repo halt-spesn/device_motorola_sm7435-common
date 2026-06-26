@@ -142,10 +142,10 @@ TARGET_KERNEL_EXT_MODULES += \
     motorola/drivers/mmi_relay \
     motorola/drivers/sensors \
     motorola/drivers/input/touchscreen/touchscreen_mmi \
+    motorola/drivers/power/mmi_charger \
     motorola/drivers/power/bm_adsp_ulog \
     motorola/drivers/power/qti_glink_charger \
     motorola/drivers/power/qpnp_adaptive_charge \
-    motorola/drivers/power/mmi_charger \
     motorola/drivers/misc/mmi_sys_temp \
     motorola/drivers/moto_mmap_fault \
     motorola/drivers/input/touchscreen/goodix_berlin_mmi \
