@@ -35,3 +35,8 @@ masterclear.allow_retain_esim_profiles_after_fdr=true
 
 # Media
 media.stagefright.audio.deep=false
+
+# RKP
+remote_provisioning.enable_rkpd=true
+remote_provisioning.hostname=remoteprovisioning.googleapis.com
+remote_provisioning.strongbox.rkp_only=true
