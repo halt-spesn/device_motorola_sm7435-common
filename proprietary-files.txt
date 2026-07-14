@@ -1,5 +1,5 @@
 ## All proprietary files from this list, unless pinned and noted otherwise,
-## are from edge 50 fusion (16 W1UUI36H.110-51-1 f75853-d1778b).
+## are from edge 50 fusion (16 W1UUIS36H.110-51-1-1 b837c4-71795a).
 ## TELEU variant
 
 # ADSP
