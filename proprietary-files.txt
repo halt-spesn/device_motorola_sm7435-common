@@ -1,6 +1,6 @@
 ## All proprietary files from this list, unless pinned and noted otherwise,
-## are from Motorola Moto G75 (paros) (16 W1UQ36H.73-28).
-## variant: RETBR
+## are from edge 50 fusion (16 W1UUI36H.110-51-1 f75853-d1778b).
+## TELEU variant
 
 # ADSP
 vendor/bin/adsprpcd
