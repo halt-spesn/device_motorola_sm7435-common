@@ -19,6 +19,7 @@ bam_dma.ko
 msm_gpi.ko
 qcom_cpuss_sleep_stats.ko
 pdr_interface.ko
+qcom_pdr_msg.ko
 qmi_helpers.ko
 heap_mem_ext_v01.ko
 msm_memshare.ko
